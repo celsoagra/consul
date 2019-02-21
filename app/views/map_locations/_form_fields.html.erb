@@ -1,3 +1,12 @@
+<div>
+  <%= form.label t("#{i18n_namespace}.form.map_skip_radiobutton") %>   
+   <%= form.collection_radio_buttons :skip_map, {Sim: 0, Não: 1}.map{|k,v| OpenStruct.new(value: v, label: k) }, :value, :label%>
+   <%= form.text_field :skip_map, label: false, disabled: true, 
+      class: 'skip_map_text', style: "display:none;"%>
+
+</div>
+
+
 <%= form.label :map_location, label %>
 <p class="help-text" id="tag-list-help-text"><%= help %></p>
 
@@ -17,16 +26,4 @@
                               value: map_location.zoom,
                               id: map_location_input_id(parent_class, 'zoom') %>
 
-  <div>
-    <%= form.label :skip_map do %>
-      <%= form.check_box :skip_map,
-                         title: t("#{i18n_namespace}.form.map_skip_checkbox"),
-                         label: false,
-                         class: 'js-toggle-map' %>
-      <span class="checkbox">
-        <%= t("#{i18n_namespace}.form.map_skip_checkbox") %>
-      </span>
-    <% end %>
-  </div>
 <% end %>
-

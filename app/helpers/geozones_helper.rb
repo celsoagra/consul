@@ -5,7 +5,7 @@ module GeozonesHelper
   end
 
   def geozone_select_options
-    Geozone.all.order(name: :asc).collect { |g| [ g.name, g.id ] }
+    Geozone.all.order(name: :asc).collect { |g| [ g.name, g.id, {'data-map_coordinates'=>g.html_map_coordinates} ] }
   end
 
   def geozone_name_from_id(g_id)

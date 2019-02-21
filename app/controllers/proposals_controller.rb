@@ -32,6 +32,10 @@ class ProposalsController < ApplicationController
     redirect_to proposal_path(@proposal), status: :moved_permanently if request.path != proposal_path(@proposal)
   end
 
+  def new
+    @proposal.skip_map = 1
+  end
+
   def create
     @proposal = Proposal.new(proposal_params.merge(author: current_user))
 

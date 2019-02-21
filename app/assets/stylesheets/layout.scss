@@ -1038,6 +1038,10 @@ form {
     margin-right: 0;
   }
 
+  [name="proposal[skip_map]"]{
+    margin-left: 10px;
+  }
+
   [type=file] {
     margin: $line-height / 2 0 $line-height / 2 $line-height / 4;
   }
