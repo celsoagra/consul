@@ -1,21 +1,49 @@
+center_lat = '' 
+center_lon = ''
+clone_map = ''
 App.Map =
-
   initialize: ->
     maps = $('*[data-map]')
-
+    center_lat = maps.data('map-center-latitude')
+    center_lon = maps.data('map-center-longitude')
+    clone_map = $('*[data-map]').clone()
     if maps.length > 0
       $.each maps, (index, map) ->
         App.Map.initializeMap map
+
+    $('[type="radio"]').on
+        click: ->
+          $('.skip_map_text').val($(this).val())
+          App.Map.toggleMap()
 
     $('.js-toggle-map').on
         click: ->
           App.Map.toggleMap()
 
+    $('#proposal_geozone_id').on 
+        change: ->
+          cityLocation = $(this).find('option').filter(':selected').data('map_coordinates')
+          if cityLocation
+            coordinates = cityLocation.split(',')
+            if coordinates.length > 0
+              new_map = clone_map.clone()
+              center_lat = coordinates[0]
+              center_lon = coordinates[1]
+              $('*[data-map]').remove()
+              $('#tag-list-help-text').append(new_map)
+              $.each clone_map, (index, map) ->
+                App.Map.initializeMap map
+                if $('.skip_map_text').val() == '1'
+                  App.Map.toggleMap()
+
+    if $('.skip_map_text').val() == '1'
+      App.Map.toggleMap()
+
   initializeMap: (element) ->
     App.Map.cleanInvestmentCoordinates(element)
 
-    mapCenterLatitude        = $(element).data('map-center-latitude')
-    mapCenterLongitude       = $(element).data('map-center-longitude')
+    mapCenterLatitude        = center_lat
+    mapCenterLongitude       = center_lon
     markerLatitude           = $(element).data('marker-latitude')
     markerLongitude          = $(element).data('marker-longitude')
     zoom                     = $(element).data('map-zoom')
@@ -74,7 +102,7 @@ App.Map =
     openMarkerPopup = (e) ->
       marker = e.target
 
-      $.ajax '/investments/' + marker.options['id'] + '/json_data',
+      $.ajax 'investments/' + marker.options['id'] + '/json_data',
         type: 'GET'
         dataType: 'json'
         success: (data) ->
